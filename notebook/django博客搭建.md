@@ -501,3 +501,201 @@ window.onload = function () {
 }
 ```
 
+### 6.登陆注册页面
+
+- 在创建一个app因为登录注册属于授权了，所以创建个bkauth
+
+```python
+python manage.py startapp bkauth
+```
+
+- 注册qpp，在app里面创建urls文件，还有view文件
+
+- ```python
+  from django.urls import path
+  from . import views
+  
+  app_name = 'bkauth'
+  urlpatterns = [
+      path('login', views.login, name='login'),
+      path('register', views.register, name='register'),
+  ]
+  ```
+
+```python
+from django.shortcuts import render
+
+# Create your views here.
+def login(request):
+    return  render(request, 'login.html')
+
+def register(request):
+    return render(request, 'register.html')
+```
+
+还有在大的urls里面添加东西
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+
+    path('auth/', include('bkauth.urls')),
+]
+```
+
+- 在templates里面分别创建login.html、register.html,并把index.html文件代码复制获取并做修改
+
+login.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客之旅</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap-5.3.3-dist/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<header class="p-3 text-bg-light border-bottom mb-2">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img src="{% static 'image/logo-mi2.png' %}" alt="" height="40">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-secondary">首页</a></li>
+                <li><a href="#" class="nav-link px-2 text-secondary">发布博客</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control  text-bg-light" placeholder="搜索..."
+                       aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-primary me-2">登录</button>
+                <button type="button" class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="container bg-white p-2 rounded">
+    <div style="max-width: 330px" class="m-auto">
+       <h1 class="text-center">登录</h1> 
+        <form method="post" action="">
+            <div class="mb-3">
+                <label>邮箱</label>
+                <input type="email" class="form-control" name="email" placeholder="邮箱">
+            </div>
+            <div class="mb-3">
+                <label>密码</label>
+                <input type="password" class="form-control" name="password" placeholder="密码">
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    记住我
+                </label>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary w-100">登录</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
+```
+
+![1731851709124](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731851709124.png)
+
+效果：
+
+![1731851932895](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731851932895.png)
+
+register.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客之旅</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap-5.3.3-dist/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<header class="p-3 text-bg-light border-bottom mb-2">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img src="{% static 'image/logo-mi2.png' %}" alt="" height="40">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-secondary">首页</a></li>
+                <li><a href="#" class="nav-link px-2 text-secondary">发布博客</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control  text-bg-light" placeholder="搜索..."
+                       aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-primary me-2">登录</button>
+                <button type="button" class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="container bg-white p-2 rounded">
+    <div style="max-width: 330px" class="m-auto">
+        <h1 class="text-center">注册</h1>
+        <form method="post" action="">
+            <div class="mb-3">
+                <label>用户名</label>
+                <input type="text" class="form-control" name="username" placeholder="用户名">
+            </div>
+            <div class="mb-3">
+                <label>邮箱</label>
+                <input type="email" class="form-control" name="email" placeholder="邮箱">
+            </div>
+            <div class="mb-3">
+                <label>验证码</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="验证码"
+                           aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button">获取验证码</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>密码</label>
+                <input type="password" class="form-control" name="password" placeholder="密码">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary w-100">注册</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
+```
+
+![1731852015012](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731852015012.png)
+
+验证码这个重要
+![1731852067965](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731852067965.png)
