@@ -354,3 +354,35 @@ row-cols-2代表一行两列
 ```
 
 ![1731829726820](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731829726820.png)
+
+### 4.博客详情页
+
+- 写view.py
+
+```python
+def blog_detail(request，blog_id):
+    return render(request, 'blog_detail.html')
+```
+
+- 写urls.py
+
+```python
+path('blog/<blog_id>', views.blog_detail, name='blog_detail'),
+```
+
+- 在templates创建blog_detail.html文件
+
+  - 把index.html文件内容复制过去，然后对齐先简单修改，主要把main里面的改了
+
+    ![1731830675901](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731830675901.png)
+
+![1731839073163](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731839073163.png)
+
+下面是效果
+![1731839416762](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731839416762.png)
+
+接下来做用户评论列表，打开bootstrap5，搜索list group
+
+![1731840653218](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731840653218.png)
+
+选这种带下划线的复制下来
