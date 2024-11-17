@@ -699,3 +699,58 @@ register.html
 
 验证码这个重要
 ![1731852067965](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731852067965.png)
+
+### 7.发送验证码设置
+
+- setting配置文件
+
+```python
+#邮件配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'  # 如果是 163 改成 smtp.163.com
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '2494346096@qq.com'  # 发送邮件的邮箱帐号
+EMAIL_HOST_PASSWORD = 'xntdswyfsqfpdihb'  # 授权码,各邮箱的设置中启用smtp服务时获取
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  #收件人显示发件人的邮箱
+EMAIL_USE_SSL = True   # 使用ssl
+# EMAIL_USE_TLS = False # 使用tls
+# EMAIL_USE_SSL 和 EMAIL_USE_TLS 是互斥的，即只能有一个为 True
+```
+
+EMAIL_HOST_PASSWORD = 'xntdswyfsqfpdihb'  # 授权码,各邮箱的设置中启用smtp服务时获取，这是在开启邮箱发送服务会有
+
+- 在view.py编写函数
+
+```python
+def send_email_captcha(request):
+    email = request.GET.get('email')
+    if not email:
+        return JsonResponse({'code': 400, 'message': '必须传递邮箱'})
+    # 生成验证码（取随机的4位阿拉伯数字）
+    captcha = "".join(random.sample(string.digits, 4))
+    try:
+        send_mail(
+            subject='博客之旅注册验证码',
+            message=f"您的验证码是: {captcha}",
+            from_email=None,  # 请在 settings.py 中设置 DEFAULT_FROM_EMAIL 或直接在此处指定
+            recipient_list=[email]
+        )
+        return JsonResponse({"code": 200, "message": "邮箱验证码发送成功！"})
+    except Exception as e:
+        return JsonResponse({"code": 500, "message": "发送失败", "error": str(e)})
+```
+
+- 在urls.py里面配置路由
+
+```python
+from django.urls import path
+from . import views
+
+app_name = 'bkauth'
+urlpatterns = [
+    path('login', views.login, name='login'),
+    path('register', views.register, name='register'),
+    path('captcha', views.send_email_captcha, name='email'),
+]
+```
+
