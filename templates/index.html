@@ -3,8 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>博客之旅</title>
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.3-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap-5.3.3-dist/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap-5.3.3-dist/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
+<header class="p-3 text-bg-light border-bottom mb-2">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img src="{% static 'image/logo-mi2.png' %}" alt="" height="40">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-secondary">首页</a></li>
+                <li><a href="#" class="nav-link px-2 text-secondary">发布博客</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control  text-bg-light" placeholder="搜索..."
+                       aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-primary me-2">登录</button>
+                <button type="button" class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </div>
+</header>
+<main class="container bg-white p-2 rounded">
+    <h1>博客列表</h1>
+    <div class="row row-gap-4"> <!-- 移除 row-cols-2 -->
+        <!-- 第一个卡片 -->
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    Django基础知识
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
 
 </body>
 </html>
