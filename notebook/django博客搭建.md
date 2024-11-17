@@ -386,3 +386,118 @@ path('blog/<blog_id>', views.blog_detail, name='blog_detail'),
 ![1731840653218](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731840653218.png)
 
 选这种带下划线的复制下来
+![1731844909566](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731844909566.jpg)
+
+### 5.发布博客详情页
+
+- 老规矩，创建view.py
+  ```python
+  def pub_blog(request):
+      return render(request, 'pub_blog.html')
+  ```
+
+  
+
+- 配置urls
+  ```python
+  urlpatterns = [
+      path('', views.index, name='index'),
+      path('blog/detail/<blog_id>', views.blog_detail, name='blog_detail'),
+      path('blog/pub', views.pub_blog, name='pub_blog'),
+  
+  ]
+  
+  ```
+
+  
+
+- 创建pub_blog.html，并把index内容复制过去，在进行修改,还是只修改main
+
+```html
+<main class="container bg-white p-2 rounded">
+    <h1>发布博客</h1>
+    <div class="mt-3">
+        <form action="" method="post">
+            <div class="mb-3">
+                <label class="form-label">标题</label>
+                <input type="text" name="title" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">分类</label>
+                <select name="category" class="form-select">
+                    <option value="1">python</option>
+                    <option value="2">前端</option>
+                    <option value="3">人工智能</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">内容</label>
+                <div id="editor—wrapper">
+                    <div id="toolbar-container"><!-- 工具栏 --></div>
+                    <div id="editor-container"><!-- 编辑器 --></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="mt-3 text-end">
+        <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+
+</main>
+```
+
+![1731848125865](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731848125865.png)
+
+怎样弄内容编辑器呢，这里使用的是https://www.wangeditor.com/ 这个编辑器
+
+- 下载wangeditor的js与css文件，并在head上面导入
+
+![1731848836314](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731848836314.png)
+
+- 把下面的style写在引入下面
+
+```html
+<style>
+  #editor—wrapper {
+    border: 1px solid #ccc;
+    z-index: 100; /* 按需定义 */
+  }
+  #toolbar-container { border-bottom: 1px solid #ccc; }
+  #editor-container { height: 500px; }
+</style>
+```
+
+- 写个js文件，并且也引入
+  ![1731848967042](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731848967042.png)
+
+```javascript
+window.onload = function () {
+    const {createEditor, createToolbar} = window.wangEditor
+
+    const editorConfig = {
+        placeholder: 'Type here...',
+        onChange(editor) {
+            const html = editor.getHtml()
+            console.log('editor content', html)
+            // 也可以同步到 <textarea>
+        }
+    }
+
+    const editor = createEditor({
+        selector: '#editor-container',
+        html: '<p><br></p>',
+        config: editorConfig,
+        mode: 'default', // or 'simple'
+    })
+
+    const toolbarConfig = {}
+
+    const toolbar = createToolbar({
+        editor,
+        selector: '#toolbar-container',
+        config: toolbarConfig,
+        mode: 'default', // or 'simple'
+    })
+}
+```
+
