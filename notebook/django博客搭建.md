@@ -200,3 +200,157 @@ STATICFILES_DIRS = [
 在容器里面加入卡片，因为咱的布局是在博客列表下面，然后一行两个卡片布局，所以要用下面方法
 
 
+```html
+<div class="row row-cols-2">
+    <div class="col">
+        <div class="card text-center">
+            <div class="card-header">
+                Featured
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            <div class="card-footer text-body-secondary">
+                2 days ago
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+row-cols-2代表一行两列
+
+中间卡片是复制的bootstrap
+
+![1731826571303](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731826571303.png)
+
+下面是代码
+
+```html
+<main class="container bg-white p-2 rounded">
+    <h1>博客列表</h1>
+    <div class="row row-gap-2"> <!-- 移除 row-cols-2 -->
+        <!-- 第一个卡片 -->
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+        <!-- 第二个卡片 -->
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+```
+
+效果：
+
+![1731827116004](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731827116004.png)
+
+然后改成自己需要的，把居中删掉，固定卡片大小，使它不会因为内容而改变大小
+
+![image-20241117154736170](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\image-20241117154736170.png)
+
+修改后代码，以及效果
+
+```html
+<main class="container bg-white p-2 rounded">
+    <h1>博客列表</h1>
+    <div class="row row-gap-4"> <!-- 移除 row-cols-2 -->
+        <!-- 第一个卡片 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <a href="#">Django 基础知识</a>
+                </div>
+                <div class="card-body " style="height: 100px">
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                </div>
+                <div class="card-footer text-body-secondary d-flex justify-content-between">
+                    <div>
+                        <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="30" height="30" alt="">
+                        wwj
+                    </div>
+                    <div>发布时间: 2024年11月17日  11:28</div>
+                </div>
+            </div>
+        </div>
+        <!-- 第二个卡片 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <a href="#">Django 基础知识</a>
+                </div>
+                <div class="card-body " style="height: 100px">
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                </div>
+                <div class="card-footer text-body-secondary d-flex justify-content-between">
+                    <div>
+                        <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="30" height="30" alt="">
+                        wwj
+                    </div>
+                    <div>发布时间: 2024年11月17日  11:28</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+```
+
+![1731829726820](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731829726820.png)
