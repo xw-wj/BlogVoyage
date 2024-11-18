@@ -754,3 +754,39 @@ urlpatterns = [
 ]
 ```
 
+### 8.数据库配置，验证码存储
+
+- 配置文件setting里面加入MySQL数据库配置
+
+```python
+#数据库配置
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '3306'
+    }
+}
+```
+
+- 在bkauth里的modle.py文件里创建存储邮箱的表
+
+```python
+from django.db import models
+
+# Create your models here.
+class CaptchaModel(models.Model):
+    email = models.EmailField(unique=True)
+    captcha = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+```
+
+- 在原来的函数里加一行代码存储到数据库
+
+![1731916538593](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1731916538593.png)
+
+### 9.获取验证码按钮倒计时
+

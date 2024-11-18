@@ -74,10 +74,15 @@ WSGI_APPLICATION = 'BlogVoyage.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#数据库配置
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 
@@ -120,14 +125,14 @@ STATICFILES_DIRS = [
 ]
 #邮件配置
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.qq.com'  # 如果是 163 改成 smtp.163.com
-EMAIL_PORT = 587
-EMAIL_HOST_USER = '2494346096@qq.com'  # 发送邮件的邮箱帐号
-EMAIL_HOST_PASSWORD = 'xntdswyfsqfpdihb'  # 授权码,各邮箱的设置中启用smtp服务时获取
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  #收件人显示发件人的邮箱
-EMAIL_USE_SSL = True   # 使用ssl
-# EMAIL_USE_TLS = False # 使用tls
-# EMAIL_USE_SSL 和 EMAIL_USE_TLS 是互斥的，即只能有一个为 True
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 465  # 修改为 465
+EMAIL_HOST_USER = '2494346096@qq.com'
+EMAIL_HOST_PASSWORD = 'xntdswyfsqfpdihb'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_SSL = True  # 保持为 True
+# EMAIL_USE_TLS = False  # 确保它是注释掉的
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
