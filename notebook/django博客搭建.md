@@ -1120,3 +1120,25 @@ def login(request):
 {% endif %}
 ```
 
+### 14.退出登录功能实现
+
+- 在view里面写函数
+
+```python
+from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
+def bklogout(request):
+    logout(request)
+    return redirect('/')
+```
+
+- 在urls里面写映射
+
+```python
+path('logout', views.bklogout, name='logout'),
+```
+
+- 载base里面把退出登录的href修改为
+
+```html
+<li><a class="dropdown-item" href="{% url 'bkauth:logout' %}">退出登录</a></li>
+```

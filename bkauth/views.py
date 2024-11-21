@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, reverse
 from .models import CaptchaModel
 from django.views.decorators.http import require_http_methods
 from .forms import RegisterForm, LoginForm
-from django.contrib.auth import get_user_model, authenticate, login as auth_login
+from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
 
 User = get_user_model()
 
@@ -34,6 +34,11 @@ def login(request):
                 # form.add_error(None, '无效的登录信息')  # 添加错误消息
                 # return render(request, 'login.html', {'form': form})
                 return redirect(reverse('bkauth:login'))
+
+
+def bklogout(request):
+    logout(request)
+    return redirect('/')
 
 
 @require_http_methods(['GET', 'POST'])

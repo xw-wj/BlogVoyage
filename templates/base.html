@@ -30,10 +30,11 @@
                 <div class="flex-shrink-0 dropdown">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{% static 'image/avatar.jpeg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <img src="{% static 'image/avatar.jpeg' %}" alt="mdo" width="32" height="32"
+                             class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small shadow">
-                        <li><a class="dropdown-item" href="#">退出登录</a></li>
+                        <li><a class="dropdown-item" href="{% url 'bkauth:logout' %}">退出登录</a></li>
                     </ul>
                 </div>
             {% else %}
