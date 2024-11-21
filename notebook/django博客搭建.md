@@ -1015,3 +1015,73 @@ def register(request):
 ```
 
 - 给register.html里面加入{%csrf token%}写在form里面第一行
+
+### 12.完成登录功能
+
+- 在bkauth里的forms.py文件加入验证传来的登录信息操作
+
+```python
+class LoginForm(forms.Form):
+    # 邮箱字段，使用 Django 内置的 EmailField 验证邮箱格式，定义错误信息
+    email = forms.EmailField(
+        error_messages={
+            'required': '请传入邮箱！',  # 当邮箱字段为空时提示
+            'invalid': '请传入一个正确邮箱！'  # 邮箱格式不正确时提示
+        }
+    )
+
+    # 密码字段，限制长度为 6-30，使用 PasswordInput 控件隐藏输入，定义错误信息
+    password = forms.CharField(
+        max_length=30,
+        min_length=6,
+        widget=forms.PasswordInput,  # 使用密码输入控件
+        error_messages={
+            'required': '请传入密码！',  # 当密码字段为空时提示
+            'min_length': '密码至少6个字符！',  # 密码少于 6 个字符时提示
+            'max_length': '密码最多30个字符！'  # 密码超过 30 个字符时提示
+        }
+    )
+    # 记住我
+    remember = forms.IntegerField(required=False)
+```
+
+- 在view里面修改login函数
+
+```python
+import random
+import string
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, reverse
+from .models import CaptchaModel
+from django.views.decorators.http import require_http_methods
+from .forms import RegisterForm, LoginForm
+from django.contrib.auth import get_user_model, authenticate, login as auth_login
+
+User = get_user_model()
+
+
+@require_http_methods(['GET', 'POST'])
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    else:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            remember = form.cleaned_data.get('remember')
+            user = User.objects.filter(email=email).first()
+            if user and user.check_password(password):
+                auth_login(request, user)
+                # 判断用户是否需要记住我
+                if not remember:
+                    # 如果没有点击记住我，那么就要设置过期时间为0，及浏览器关闭后机会过期
+                    request.session.set_expiry(0)
+                # 如果点击了就什么也不做，就默认两周的过期时间
+                return redirect('blog:index')
+            else:
+                # form.add_error(None, '无效的登录信息')  # 添加错误消息
+                # return render(request, 'login.html', {'form': form})
+                return redirect(reverse('bkauth:login'))
+```
