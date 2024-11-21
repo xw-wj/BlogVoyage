@@ -26,11 +26,23 @@
                 <input type="search" class="form-control  text-bg-light" placeholder="搜索..."
                        aria-label="Search">
             </form>
+            {% if user.is_authenticated %}
+                <div class="flex-shrink-0 dropdown">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{% static 'image/avatar.jpeg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow">
+                        <li><a class="dropdown-item" href="#">退出登录</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="text-end">
+                    <a href="{% url 'bkauth:login' %}" type="button" class="btn btn-outline-primary me-2">登录</a>
+                    <a href="{% url 'bkauth:register' %}" type="button" class="btn btn-primary">注册</a>
+                </div>
+            {% endif %}
 
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-primary me-2">登录</button>
-                <button type="button" class="btn btn-primary">注册</button>
-            </div>
         </div>
     </div>
 </header>

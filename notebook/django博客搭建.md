@@ -1085,3 +1085,38 @@ def login(request):
                 # return render(request, 'login.html', {'form': form})
                 return redirect(reverse('bkauth:login'))
 ```
+
+### 13.登录与非登录状态切换
+
+- 在base里面把注册与登陆的按钮标签里面的button改成<a>标签
+
+```html
+<a href="{% url 'bkauth:login' %}" type="button" class="btn btn-outline-primary me-2">登录</a>
+<a href="{% url 'bkauth:register' %}" type="button" class="btn btn-primary">注册</a>
+```
+
+- 去https://getbootstrap.com/docs/5.3/examples/headers/ 找带头像的导航页，右击导出outhtml
+
+![1732170464324](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1732170464324.png)
+
+- 改成下面这样
+
+```html
+{% if user.is_authenticated %}
+    <div class="flex-shrink-0 dropdown">
+        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{% static 'image/avatar.jpeg' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu text-small shadow">
+            <li><a class="dropdown-item" href="#">退出登录</a></li>
+        </ul>
+    </div>
+{% else %}
+    <div class="text-end">
+        <a href="{% url 'bkauth:login' %}" type="button" class="btn btn-outline-primary me-2">登录</a>
+        <a href="{% url 'bkauth:register' %}" type="button" class="btn btn-primary">注册</a>
+    </div>
+{% endif %}
+```
+
