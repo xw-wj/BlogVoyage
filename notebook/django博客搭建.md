@@ -1142,3 +1142,19 @@ path('logout', views.bklogout, name='logout'),
 ```html
 <li><a class="dropdown-item" href="{% url 'bkauth:logout' %}">退出登录</a></li>
 ```
+
+### 15.发布博客访问限制
+
+- 现在base.htm文件，把首页与发布博客的超链接改下
+
+![1732341462966](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1732341462966.png)
+
+- 修改blog的view.py函数
+
+```python
+from django.urls.base import reverse_lazy
+@login_required(login_url=reverse_lazy("bkauth:login"))
+def pub_blog(request):
+    return render(request, 'pub_blog.html')
+```
+
