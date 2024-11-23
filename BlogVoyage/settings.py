@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',  # 添加这行
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -107,13 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
+TIME_ZONE = 'Asia/Shanghai'
+USE_TZ = False  # 确保设置为 False
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
+# 隐藏右侧SimpleUI广告链接和使用分析
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_ANALYSIS = False
+# 去掉默认Logo或换成自己Logo链接
+# SIMPLEUI_LOGO = ''
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -138,3 +141,52 @@ EMAIL_USE_SSL = True  # 保持为 True
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SIMPLEUI_CONFIG = {
+    # 是否使用系统默认菜单，自定义菜单时建议关闭。
+    'system_keep': False,
+
+    # 用于菜单排序和过滤, 不填此字段为默认排序和全部显示。空列表[] 为全部不显示.
+    'menu_display': ['博客管理', '用户信息管理'],
+
+    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时刷新展示菜单内容。
+    # 一般建议关闭。
+    'dynamic': False,
+
+    'menus': [
+        {
+            'name': '博客管理',
+            'icon': 'fa fa-pen',
+            'models': [
+                {
+                    'name': '博客分类',
+                    'icon': 'fa fa-folder',
+                    'url': '/admin/blog/blogcategory/'
+                },
+                {
+                    'name': '博客列表',
+                    'icon': 'fa fa-blog',
+                    'url': '/admin/blog/blog/'
+                },
+                {
+                    'name': '博客评论',
+                    'icon': 'fa fa-comment',
+                    'url': '/admin/blog/blogcomment/'
+                },
+            ]
+        },
+
+        {
+            'name': '用户信息管理',
+            'icon': 'fa fa-user',
+            'models': [
+                {
+                    'name': '用户列表',
+                    'icon': 'fa fa-users',
+                    'url': '/admin/auth/user/'
+                },
+            ]
+        },
+    ]
+}
