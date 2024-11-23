@@ -1158,3 +1158,40 @@ def pub_blog(request):
     return render(request, 'pub_blog.html')
 ```
 
+### 16.博客相关模型和表的创建
+
+```python
+from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+# Create your models here.
+
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=200)
+
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    pub_time = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(BlogCategory, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class BlogComment(models.Model):
+    content = models.TextField()
+    pub_time = models.DateTimeField(auto_now_add=True)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+```
+
+然后在终端可以输入,这是数据库迁移命令
+
+```python
+python manage.py makemigrations
+python manage.py migrate
+```
+
