@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import BlogCategory, Blog, BlogComment
 
 admin.site.site_header = '博客之旅管理后台'  # 设置header
-admin.site.site_title = '博客之旅管理后台'   # 设置title
-admin.site.index_title = '博客之旅管理后台'
+admin.site.site_title = '欢迎来到博客之旅管理后台'   # 设置title
+admin.site.index_title = '博客之旅管理后台首页'
 
 class BlogCategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)  # 在列表页显示字段

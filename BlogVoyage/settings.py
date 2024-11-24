@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'bkauth.apps.BkauthConfig',
+    'smart_chart.echart',
 ]
 
 MIDDLEWARE = [
