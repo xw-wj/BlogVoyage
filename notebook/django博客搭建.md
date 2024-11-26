@@ -1456,3 +1456,14 @@ class BlogComment(models.Model):
     </ul>
 </div>
 ```
+
+### 21.代码高亮
+
+- 去下载highlight.js,解压放进那个static里面
+- 在博客详情改
+
+![1732630405450](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1732630405450.png)
+
+![1732630435515](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1732630435515.png)
+
+### 22.搜索功能
