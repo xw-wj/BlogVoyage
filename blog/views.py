@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from .models import BlogCategory, Blog, BlogComment
 from .forms import PubBlogForm
 from django.http.response import JsonResponse
+from django.http import HttpResponseNotFound
 
 
 # Create your views here.
@@ -13,7 +14,12 @@ def index(request):
 
 
 def blog_detail(request, blog_id):
-    return render(request, 'blog_detail.html')
+    try:
+        blog = Blog.objects.get(pk=blog_id)
+
+    except Exception as e:
+        blog = None
+    return render(request, 'blog_detail.html', context={'blog': blog})
 
 
 @require_http_methods(['GET', 'POST'])
@@ -40,6 +46,6 @@ def pub_blog(request):
                 category_id=category_id,  # 博客分类ID
                 author=request.user  # 博客作者，使用当前请求的用户对象
             )
-            return JsonResponse({'code': 200, 'message': "博客发布成功!", 'data':{'blog_id':blog.id}})
+            return JsonResponse({'code': 200, 'message': "博客发布成功!", 'data': {'blog_id': blog.id}})
         else:
             return JsonResponse({'code': 400, 'message': "请检查您的输入!"})

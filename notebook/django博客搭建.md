@@ -1351,3 +1351,33 @@ def pub_blog(request):
         else:
             return JsonResponse({'code': 400, 'message': "请检查您的输入!"})
 ```
+
+### 19.博客详情页动态展示
+
+- 修改他的view.py里面的函数
+
+```python
+def blog_detail(request, blog_id):
+    try:
+        blog = Blog.objects.get(pk=blog_id)
+
+    except Exception as e:
+        blog = None
+    return render(request, 'blog_detail.html', context={'blog': blog})
+```
+
+- 修改html，把以前写死的情态的改成动态的
+
+```html
+<h1>{{ blog.title }}</h1>
+<hr>
+<div class="mt-2">
+    <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="30" height="30" alt="">
+    <span class="ms-2">{{ blog.author.username }}</span>
+    <span class="ms-2">于</span>
+    <span class="ms-2">{{ blog.pub_time|date:"Y年m月d日 h时i分" }}</span>发布
+    <hr>
+    <div class="py-2">
+        {{ blog.content|safe }}
+    </div>
+```
