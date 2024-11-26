@@ -1,11 +1,10 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse_lazy
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from .models import BlogCategory, Blog, BlogComment
 from .forms import PubBlogForm
 from django.http.response import JsonResponse
-from django.http import HttpResponseNotFound
 
 
 # Create your views here.
@@ -49,3 +48,13 @@ def pub_blog(request):
             return JsonResponse({'code': 200, 'message': "博客发布成功!", 'data': {'blog_id': blog.id}})
         else:
             return JsonResponse({'code': 400, 'message': "请检查您的输入!"})
+
+
+@require_POST
+@login_required()
+def pub_comment(request):
+    blog_id = request.POST.get('blog_id')
+    content = request.POST.get('content')
+    BlogComment.objects.create(content=content, blog_id=blog_id, author=request.user)
+    # 从新加载详情页
+    return redirect(reverse('blog:blog_detail', kwargs={'blog_id': blog_id}))

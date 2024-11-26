@@ -31,7 +31,7 @@ class Blog(models.Model):
 class BlogComment(models.Model):
     content = models.TextField(verbose_name='评论内容')
     pub_time = models.DateTimeField(auto_now_add=True, verbose_name='发布时间')
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, verbose_name='博客')
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments', verbose_name='博客')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者')
 
     def __str__(self):

@@ -1381,3 +1381,78 @@ def blog_detail(request, blog_id):
         {{ blog.content|safe }}
     </div>
 ```
+
+### 20.博客评论功能完成
+
+- 修改view
+
+```python
+@require_POST
+@login_required()
+def pub_comment(request):
+    blog_id = request.POST.get('blog_id')
+    content = request.POST.get('content')
+    BlogComment.objects.create(content=content, blog_id=blog_id, author=request.user)
+    # 从新加载详情页
+    return redirect(reverse('blog:blog_detail', kwargs={'blog_id': blog_id}))
+```
+
+- 修改urls.py
+
+```python
+path('blog/comment/pub', views.pub_comment, name='pub_comment'),
+```
+
+- 在以前的models里面加个related_name='comments'
+
+```python
+class BlogComment(models.Model):
+    content = models.TextField(verbose_name='评论内容')
+    pub_time = models.DateTimeField(auto_now_add=True, verbose_name='发布时间')
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments', verbose_name='博客')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者')
+
+    def __str__(self):
+        return self.content  # 后台显示的名称
+
+    class Meta:
+        verbose_name = '博客评论'
+        verbose_name_plural = verbose_name
+```
+
+- 修改html
+
+```html
+<div class="mt-2">
+    <h3>评论（{{ blog.comments.all|length }}）</h3>
+    <form action="{% url 'blog:pub_comment' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="blog_id" value="{{ blog.id }}">
+        <div class="mt-2">
+            <input type="text" class="form-control" placeholder="请输入评论" name="content">
+        </div>
+        <div class="text-end mt-2">
+            <button type="submit" class="btn btn-outline-primary">评论</button>
+        </div>
+
+    </form>
+</div>
+<div class="mt-2">
+    <ul class="list-group list-group-flush">
+        {% for comment in blog.comments.all %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between text-body-secondary">
+                    <div class="user-info">
+                        <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="40"
+                             height="40" alt="">
+                        <span class="ms-2">{{ comment.author.username }}</span>
+                    </div>
+                    <div class="create-time"
+                         style="line-height: 40px">{{ comment.pub_time|date:"Y年m月d日 h时i分" }}</div>
+                </div>
+                <div class="mt-2">{{ comment.content }}</div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+```

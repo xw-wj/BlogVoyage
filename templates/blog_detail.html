@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block head %}
-	详情
+    详情
 {% endblock %}
 {% block main %}
-     <h1>{{ blog.title }}</h1>
+    <h1>{{ blog.title }}</h1>
     <hr>
     <div class="mt-2">
         <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="30" height="30" alt="">
@@ -16,40 +16,35 @@
         </div>
         <hr>
         <div class="mt-2">
-            <h3>评论（10）</h3>
-            <form action="" method="post">
+            <h3>评论（{{ blog.comments.all|length }}）</h3>
+            <form action="{% url 'blog:pub_comment' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="blog_id" value="{{ blog.id }}">
                 <div class="mt-2">
-                    <input type="text" class="form-control" placeholder="请输入评论">
+                    <input type="text" class="form-control" placeholder="请输入评论" name="content">
                 </div>
                 <div class="text-end mt-2">
-                    <button type="button" class="btn btn-outline-primary">评论</button>
+                    <button type="submit" class="btn btn-outline-primary">评论</button>
                 </div>
 
             </form>
         </div>
         <div class="mt-2">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item mb-3">
-                    <div class="d-flex justify-content-between text-body-secondary">
-                        <div class="user-info">
-                            <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="40" height="40" alt="">
-                            <span class="ms-2">wwj</span>
+                {% for comment in blog.comments.all %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between text-body-secondary">
+                            <div class="user-info">
+                                <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="40"
+                                     height="40" alt="">
+                                <span class="ms-2">{{ comment.author.username }}</span>
+                            </div>
+                            <div class="create-time"
+                                 style="line-height: 40px">{{ comment.pub_time|date:"Y年m月d日 h时i分" }}</div>
                         </div>
-                        <div class="create-time" style="line-height: 40px">2024年11月17日  11:28</div>
-                    </div>
-                    <div class="mt-2">这是评论的内容</div>
-                </li>
-                <li class="list-group-item">
-                    <div class="d-flex justify-content-between text-body-secondary">
-                        <div class="user-info">
-                            <img src="{% static 'image/avatar.jpeg' %}" class="rounded-circle" width="40" height="40" alt="">
-                            <span class="ms-2">wwj</span>
-                        </div>
-                        <div class="create-time" style="line-height: 40px">2024年11月17日  11:28</div>
-                    </div>
-                    <div class="mt-2">这是评论的内容</div>
-                </li>
-                
+                        <div class="mt-2">{{ comment.content }}</div>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
     </div>
