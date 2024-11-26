@@ -1253,3 +1253,101 @@ def pub_blog(request):
 
 ![1732422922652](D:\BaiduNetdiskDownload\BlogVoyage\notebook\images\1732422922652.png)
 
+### 18.发布博客前端实现
+
+- 在登陆得login.html的首部加上jquery文件
+
+- 给category，发布按钮分别加上id标签
+
+```html
+<button class="btn btn-primary" id="submit-btn">发布</button>
+<select name="category" class="form-select" id="category-select">
+```
+
+- 在pub.js 修改代码实现ajax发送请求
+
+```jquery
+window.onload = function () {
+    const {createEditor, createToolbar} = window.wangEditor
+
+    const editorConfig = {
+        placeholder: 'Type here...',
+        onChange(editor) {
+            const html = editor.getHtml()
+            console.log('editor content', html)
+            // 也可以同步到 <textarea>
+        }
+    }
+
+    const editor = createEditor({
+        selector: '#editor-container',
+        html: '<p><br></p>',
+        config: editorConfig,
+        mode: 'default', // or 'simple'
+    })
+
+    const toolbarConfig = {}
+
+    const toolbar = createToolbar({
+        editor,
+        selector: '#toolbar-container',
+        config: toolbarConfig,
+        mode: 'default', // or 'simple'
+    })
+    // 绑定点击事件
+    $("#submit-btn").click(function (event){
+        //阻止按钮的默认行为
+        event.preventDefault();
+        let title = $("input[name='title']").val();
+        let category = $("#category-select").val();
+        let content = editor.getHtml();
+        let csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+        $.ajax('/blog/pub',{
+            method:'POST',
+            data:{title,category,content,csrfmiddlewaretoken},
+            success:function (result) {
+                if(result['code'] == 200){
+                    //跳转到博客详情页面
+                    //获取博客id
+                    let blog_id = result['data']['blog_id']
+                    window.location = '/blog/detail/'+ blog_id
+                }else{
+                    alert(result['message']);
+                }
+            }
+        })
+    });
+}
+```
+
+- view.py点带你东西，下面是改过的
+
+```python
+@require_http_methods(['GET', 'POST'])
+@login_required(login_url=reverse_lazy("bkauth:login"))
+def pub_blog(request):
+    if request.method == 'GET':
+        categories = BlogCategory.objects.all()
+        return render(request, 'pub_blog.html', context={'categories': categories})
+    else:
+        form = PubBlogForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
+            category_id = form.cleaned_data.get('category')
+            # 使用 Django ORM 的 create 方法来创建一个新的 Blog 实例
+            # 这个方法接受关键字参数，每个参数对应模型中的一个字段
+            # title 参数设置博客的标题，从表单的 cleaned_data 中获取
+            # content 参数设置博客的内容，同样从表单的 cleaned_data 中获取
+            # category_id 参数设置博客所属的分类的 ID，从表单的 cleaned_data 中获取
+            # author 参数设置博客的作者，这里使用 request.user 表示当前登录的用户
+            blog = Blog.objects.create(
+                title=title,  # 博客标题
+                content=content,  # 博客内容
+                category_id=category_id,  # 博客分类ID
+                author=request.user  # 博客作者，使用当前请求的用户对象
+            )
+            return JsonResponse({'code': 200, 'message': "博客发布成功!", 'data':{'blog_id':blog.id}})
+        else:
+            return JsonResponse({'code': 400, 'message': "请检查您的输入!"})
+```

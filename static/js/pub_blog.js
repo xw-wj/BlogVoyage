@@ -25,4 +25,27 @@ window.onload = function () {
         config: toolbarConfig,
         mode: 'default', // or 'simple'
     })
+    // 绑定点击事件
+    $("#submit-btn").click(function (event){
+        //阻止按钮的默认行为
+        event.preventDefault();
+        let title = $("input[name='title']").val();
+        let category = $("#category-select").val();
+        let content = editor.getHtml();
+        let csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+        $.ajax('/blog/pub',{
+            method:'POST',
+            data:{title,category,content,csrfmiddlewaretoken},
+            success:function (result) {
+                if(result['code'] == 200){
+                    //跳转到博客详情页面
+                    //获取博客id
+                    let blog_id = result['data']['blog_id']
+                    window.location = '/blog/detail/'+ blog_id
+                }else{
+                    alert(result['message']);
+                }
+            }
+        })
+    });
 }

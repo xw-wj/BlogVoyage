@@ -40,6 +40,6 @@ def pub_blog(request):
                 category_id=category_id,  # 博客分类ID
                 author=request.user  # 博客作者，使用当前请求的用户对象
             )
-            return JsonResponse({'code': 200, 'message': "博客发布成功!"})
+            return JsonResponse({'code': 200, 'message': "博客发布成功!", 'data':{'blog_id':blog.id}})
         else:
             return JsonResponse({'code': 400, 'message': "请检查您的输入!"})
