@@ -26,6 +26,7 @@ class Blog(models.Model):
     class Meta:
         verbose_name = '博客'
         verbose_name_plural = verbose_name
+        ordering = ['-pub_time']  # 列表页按发布时间倒序排列
 
 
 class BlogComment(models.Model):
@@ -40,3 +41,4 @@ class BlogComment(models.Model):
     class Meta:
         verbose_name = '博客评论'
         verbose_name_plural = verbose_name
+        ordering = ['-pub_time']  # 列表页按发布时间倒序排列

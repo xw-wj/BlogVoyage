@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse_lazy
-from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.http import require_http_methods, require_POST, require_GET
 from .models import BlogCategory, Blog, BlogComment
 from .forms import PubBlogForm
 from django.http.response import JsonResponse
+from django.db.models import Q
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    blogs = Blog.objects.all()
+    return render(request, 'index.html', context={'blogs': blogs})
 
 
 def blog_detail(request, blog_id):
@@ -58,3 +60,10 @@ def pub_comment(request):
     BlogComment.objects.create(content=content, blog_id=blog_id, author=request.user)
     # 从新加载详情页
     return redirect(reverse('blog:blog_detail', kwargs={'blog_id': blog_id}))
+
+
+@require_GET
+def search(request):
+    q = request.GET.get('q')
+    blogs = Blog.objects.filter(Q(title__icontains=q) | Q(content__icontains=q)).all()
+    return render(request, 'index.html', context={'blogs': blogs})
